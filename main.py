@@ -41,6 +41,12 @@ def check_sim24():
             logging.info("Suche nach Button...")
             try:
                 button = page.wait_for_selector('#ButtonBuchen-ChangeServiceType-showGprsDataUsage-0V5I3', timeout=10000)
+                stats = page.wait_for_selector('.dataUsageBar-info-numbers', timeout=10000)
+                
+                if stats:
+                    used_data = stats.query_selector('.font-weight-bold').inner_text()
+                    total_data = stats.query_selector('.l-txt-small').inner_text().replace('von', '').strip()
+                    logging.info(f"Verbrauchte Daten: {used_data} von {total_data}")
                 
                 if button:
                     is_disabled = button.get_attribute('disabled') is not None
