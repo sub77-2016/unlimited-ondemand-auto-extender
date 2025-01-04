@@ -36,7 +36,11 @@ def check_sim24():
             page.click('a.c-button.submitOnEnter[title="Login"]')
             
             logging.info("Deny Cookies...")
-            page.click('#consent_wall_optout')
+            consent_button = page.query_selector('#consent_wall_optout')
+            if consent_button and consent_button.is_visible():
+                consent_button.click()
+            else:
+                logging.info("Consent button not visible, skipping...")
             
             logging.info("Suche nach Button...")
             try:
