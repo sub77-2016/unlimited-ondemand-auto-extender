@@ -1,10 +1,10 @@
-# SIM24 Auto Extender
+# Unlimited OnDemand Auto Extender
 
-Dieses Tool automatisiert das Nachbuchen von Datenvolumen bei SIM24-Unlimited-Tarifen. Bei diesen Tarifen muss nach Verbrauch der ersten 50GB das Datenvolumen manuell in 2GB-Schritten nachgebucht werden. Dieser Prozess wird durch dieses Script vollautomatisch erledigt.
+Dieses Tool automatisiert das Nachbuchen von Datenvolumen bei SIM24- und 1&1-Unlimited-Demand-Tarifen. Bei diesen Tarifen muss nach Verbrauch der ersten 50GB das Datenvolumen manuell in Schritten nachgebucht werden. Dieser Prozess wird durch dieses Script vollautomatisch erledigt.
 
 ## Features
 
-- Automatische Anmeldung im SIM24-Portal
+- Automatische Anmeldung im SIM24- oder 1&1-Portal
 - Kontinuierliche Überwachung des Datenvolumens
 - Automatisches Nachbuchen bei Bedarf
 - Ausführliche Logging-Funktionen
@@ -13,54 +13,56 @@ Dieses Tool automatisiert das Nachbuchen von Datenvolumen bei SIM24-Unlimited-Ta
 ## Voraussetzungen
 
 - Docker auf dem System installiert
-- SIM24 Account-Zugangsdaten
-- Ein aktiver SIM24-Unlimited-Tarif
+- SIM24 oder 1&1 Account-Zugangsdaten
+- Ein aktiver Unlimited-Demand-Tarif bei einem der unterstützten Anbieter
 
 ## Installation & Einrichtung
 
 1. Image herunterladen:
 ```bash
-docker pull ghcr.io/danielwte/sim24-auto-extender:latest
+docker pull ghcr.io/danielwte/unlimited-ondemand-auto-extender:latest
 ```
 
 2. Container starten:
 ```bash
 docker run -d \
-  -e USERNAME="sim24-username" \
-  -e PASSWORD="sim24-password" \
+  -e USERNAME="service-username" \
+  -e PASSWORD="service-password" \
+  -e SERVICE="service" \
   -e CHECK_INTERVAL=300 \
-  --name sim24-auto-extender \
-  ghcr.io/danielwte/sim24-auto-extender:latest
+  --name unlimited-ondemand-auto-extender \
+  ghcr.io/danielwte/unlimited-ondemand-auto-extender:latest
 ```
 
 ### Umgebungsvariablen
 
-- `USERNAME`: Der SIM24 Benutzername
-- `PASSWORD`: Das SIM24 Passwort
+- `USERNAME`: Der Benutzername für das entsprechende Portal
+- `PASSWORD`: Das Passwort für das entsprechende Portal
 - `CHECK_INTERVAL`: Prüfintervall in Sekunden (Standard: 300)
+- `SERVICE`: Der zu überwachende Service (Standard: sim24, Optionen: sim24, 1und1)
 
 ## Logs einsehen
 
 Die Logs können wie folgt eingesehen werden:
 ```bash
-docker logs sim24-auto-extender
+docker logs unlimited-ondemand-auto-extender
 ```
 
 ## Container-Verwaltung
 
 Container neustarten:
 ```bash
-docker restart sim24-auto-extender
+docker restart unlimited-ondemand-auto-extender
 ```
 
 Container stoppen:
 ```bash
-docker stop sim24-auto-extender
+docker stop unlimited-ondemand-auto-extender
 ```
 
 Container entfernen:
 ```bash
-docker rm sim24-auto-extender
+docker rm unlimited-ondemand-auto-extender
 ```
 
 ## Automatischer Start nach Systemneustart
@@ -69,19 +71,20 @@ Für einen automatischen Start nach einem Systemneustart:
 ```bash
 docker run -d \
   --restart unless-stopped \
-  -e USERNAME="sim24-username" \
-  -e PASSWORD="sim24-password" \
+  -e USERNAME="service-username" \
+  -e PASSWORD="service-password" \
+  -e SERVICE="service" \
   -e CHECK_INTERVAL=300 \
-  --name sim24-auto-extender \
-  ghcr.io/danielwte/sim24-auto-extender:latest
+  --name unlimited-ondemand-auto-extender \
+  ghcr.io/danielwte/unlimited-ondemand-auto-extender:latest
 ```
 
 ## Sicherheit
 
 - Die Zugangsdaten werden nur innerhalb des Containers verwendet
 - Es werden keine Daten persistent gespeichert
-- Die Kommunikation erfolgt direkt mit dem SIM24-Portal
+- Die Kommunikation erfolgt direkt mit dem Portal des entsprechenden Anbieters
 
 ## Disclaimer
 
-Dieses Tool ist ein inoffizielles Hilfsprogramm und steht in keiner Verbindung zu SIM24. Die Nutzung erfolgt auf eigene Verantwortung.
+Dieses Tool ist ein inoffizielles Hilfsprogramm und steht in keiner Verbindung zu SIM24 oder 1&1. Die Nutzung erfolgt auf eigene Verantwortung.
