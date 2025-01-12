@@ -55,9 +55,10 @@ def check_1und1(username, password, CHECK_INTERVAL):
             while True:
                 try:
                     logging.info("Lade Verbrauchsübersicht...")
+                    take_screenshot(page, "usage_page_before", "1und1")
                     page.goto('https://control-center.1und1.de/usages.html')
                     time.sleep(5)
-                    take_screenshot(page, "usage_page", "1und1")
+                    take_screenshot(page, "usage_page_after", "1und1")
                     logging.info("Buchungseite geladen, warte 5 Sekunden...")
                     
                     try:
