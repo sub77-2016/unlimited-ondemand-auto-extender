@@ -78,6 +78,7 @@ def check_1und1(username, password, CHECK_INTERVAL):
 
                 except Exception as e:
                     logging.error(f"Fehler während der Überprüfung: {str(e)}")
+                    logging.error(page.content())
                     if browser:
                         browser.close()
                     return
