@@ -47,14 +47,18 @@ def check_1und1(username, password, CHECK_INTERVAL):
                 try:
                     logging.info("Lade Verbrauchsübersicht...")
                     page.goto('https://control-center.1und1.de/usages.html')
-                    time.sleep(3)
+                    logging.info("Buchungseite geladen, warte 5 Sekunden...")
+                    time.sleep(5)
                     
-                    page.wait_for_selector('div[data-testid="usage-volume-used"] strong')
-                    used_data = page.locator('div[data-testid="usage-volume-used"] strong').nth(-1).text_content()
-                    if used_data:
-                        logging.info(f"Verbrauchte Daten: {used_data}")
-                    else:
-                        logging.warning("Verbrauchsdaten nicht gefunden.")
+                    try:
+                        page.wait_for_selector('div[data-testid="usage-volume-used"] strong', timeout=10000)
+                        used_data = page.locator('div[data-testid="usage-volume-used"] strong').nth(-1).text_content()
+                        if used_data:
+                            logging.info(f"Verbrauchte Daten: {used_data}")
+                        else:
+                            logging.warning("Verbrauchsdaten nicht gefunden.")
+                    except TimeoutError:
+                        logging.warning("Timeout beim Warten auf Verbrauchsdaten.")
                     
                     button = page.locator('button:has-text("+1 GB")')
                     if button:
