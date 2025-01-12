@@ -20,20 +20,24 @@ def check_1und1(username, password, CHECK_INTERVAL):
             page.fill('#login-form-password', password)
             page.click('#login-button')
             
-            robot_button = page.wait_for_selector('button.button-primary.button-access:has-text("E-Mail senden")', timeout=5000)
-            if robot_button.is_visible():
-                logging.info("Roboter-Verifizierung erkannt")
-                logging.info("Sende Verifizierungs-Email...")
-                robot_button.click()
-                
-                logging.info("Bitte öffnen Sie die Verifizierungs-Email und bestätigen Sie den Link.")
-                logging.info("Der Prozess wird in 60 Sekunden neu gestartet.")
-                
-                time.sleep(60)
-                
-                if browser:
-                    browser.close()
-                return
+            logging.info("Warte auf Roboter-Verifizierung...")
+            try:
+                robot_button = page.wait_for_selector('button.button-primary.button-access:has-text("E-Mail senden")', timeout=5000)
+                if robot_button and robot_button.is_visible():
+                    logging.info("Roboter-Verifizierung erkannt")
+                    logging.info("Sende Verifizierungs-Email...")
+                    robot_button.click()
+                    
+                    logging.info("Bitte öffnen Sie die Verifizierungs-Email und bestätigen Sie den Link.")
+                    logging.info("Der Prozess wird in 60 Sekunden neu gestartet.")
+                    
+                    time.sleep(60)
+                    
+                    if browser:
+                        browser.close()
+                    return
+            except Exception as e:
+                logging.info(f"Keine Roboter-Verifizierung erkannt, gehe weiter...")
             
             logging.info("Login erfolgreich")
             
