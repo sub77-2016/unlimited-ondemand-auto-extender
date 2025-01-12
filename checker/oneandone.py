@@ -20,7 +20,7 @@ def check_1und1(username, password, CHECK_INTERVAL):
             page.fill('#login-form-password', password)
             page.click('#login-button')
             
-            robot_button = page.locator('button.button-primary.button-access:has-text("E-Mail senden")')
+            robot_button = page.wait_for_selector('button.button-primary.button-access:has-text("E-Mail senden")', timeout=5000)
             if robot_button.is_visible():
                 logging.info("Roboter-Verifizierung erkannt")
                 logging.info("Sende Verifizierungs-Email...")
