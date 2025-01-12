@@ -1,6 +1,7 @@
 import time
 from playwright.sync_api import sync_playwright
 import logging
+from utils.screenshot import take_screenshot
 
 def check_1und1(username, password, CHECK_INTERVAL):
     logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
@@ -14,7 +15,7 @@ def check_1und1(username, password, CHECK_INTERVAL):
 
             logging.info("Öffne Login-Seite...")
             page.goto('https://account.1und1.de/')
-            
+            take_screenshot(page, "before_login", "1und1")
             logging.info("Führe Login durch...")
             page.fill('#login-form-user', username)
             page.fill('#login-form-password', password)
@@ -38,8 +39,12 @@ def check_1und1(username, password, CHECK_INTERVAL):
                     return
             except Exception as e:
                 logging.info(f"Keine Roboter-Verifizierung erkannt, gehe weiter...")
+                
+            take_screenshot(page, "after_login", "1und1")
             
             logging.info("Login erfolgreich")
+            
+            take_screenshot(page, "cookies_page", "1und1")
             
             logging.info("Cookies ablehnen...")
             try:
@@ -51,8 +56,9 @@ def check_1und1(username, password, CHECK_INTERVAL):
                 try:
                     logging.info("Lade Verbrauchsübersicht...")
                     page.goto('https://control-center.1und1.de/usages.html')
-                    logging.info("Buchungseite geladen, warte 5 Sekunden...")
                     time.sleep(5)
+                    take_screenshot(page, "usage_page", "1und1")
+                    logging.info("Buchungseite geladen, warte 5 Sekunden...")
                     
                     try:
                         page.wait_for_selector('div[data-testid="usage-volume-used"] strong', timeout=10000)
@@ -78,6 +84,7 @@ def check_1und1(username, password, CHECK_INTERVAL):
                             if confirm_button:
                                 confirm_button.click()
                                 logging.info("Bestätigungsdialog erfolgreich geschlossen.")
+                                take_screenshot(page, "after_booking", "1und1")
                     else:
                         logging.warning("Button '+1 GB' nicht gefunden.")
 

@@ -1,5 +1,6 @@
 from playwright.sync_api import sync_playwright
 import logging
+from utils.screenshot import take_screenshot
 
 def check_sim24(username, password):
     try:
@@ -15,6 +16,7 @@ def check_sim24(username, password):
             page.fill('input[name="UserLoginType[password]"]', password)
             
             page.click('a.c-button.submitOnEnter[title="Login"]')
+            take_screenshot(page, "after_login", "sim24")
             
             logging.info("Deny Cookies...")
             consent_button = page.query_selector('#consent_wall_optout')
@@ -32,6 +34,7 @@ def check_sim24(username, password):
                     used_data = stats.query_selector('.font-weight-bold').inner_text()
                     total_data = stats.query_selector('.l-txt-small').inner_text().replace('von', '').strip()
                     logging.info(f"Verbrauchte Daten: {used_data} von {total_data}")
+                    take_screenshot(page, "usage_page", "sim24")
                 
                 if button:
                     is_disabled = button.get_attribute('disabled') is not None
@@ -44,6 +47,7 @@ def check_sim24(username, password):
                         logging.info("Button erfolgreich geklickt")
                     
                         page.click('#ButtonAktivieren-ChangeServiceType-getChangeServiceInfo-1V5I3')
+                        take_screenshot(page, "after_booking", "sim24")
                     
                         logging.info("Prozess erfolgreich beendet")
                         return
