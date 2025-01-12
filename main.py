@@ -37,22 +37,20 @@ logging.getLogger().addFilter(PrefixFilter(SERVICE))
 def main():
     logging.info("Starte Automatisierung...")
     
-    while True:
-        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        logging.info(f"Starte neue Überprüfung um {current_time}")
-        
-        try:
-            if SERVICE == "sim24":
+    try:
+        if SERVICE == "sim24":
+            while True:
+                current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                logging.info(f"Starte neue Überprüfung um {current_time}")
                 check_sim24(USERNAME, PASSWORD)
-            elif SERVICE == "1und1":
-                check_1und1(USERNAME, PASSWORD)
-            else:
-                logging.error(f"Unbekannte Service-ID: {SERVICE}")
-        except Exception as e:
-            logging.error(f"Fehler im Hauptprozess: {str(e)}")
-        
-        logging.info(f"Warte {CHECK_INTERVAL} Sekunden bis zur nächsten Überprüfung...")
-        time.sleep(CHECK_INTERVAL)
+                logging.info(f"Warte {CHECK_INTERVAL} Sekunden bis zur nächsten Überprüfung...")
+                time.sleep(CHECK_INTERVAL)
+        elif SERVICE == "1und1":
+            check_1und1(USERNAME, PASSWORD, CHECK_INTERVAL)
+        else:
+            logging.error(f"Unbekannte Service-ID: {SERVICE}")
+    except Exception as e:
+        logging.error(f"Fehler im Hauptprozess: {str(e)}")
 
 if __name__ == "__main__":
     main()
