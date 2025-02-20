@@ -71,7 +71,7 @@ def check_1und1(username, password, CHECK_INTERVAL):
                     except TimeoutError:
                         logging.warning("Timeout beim Warten auf Verbrauchsdaten.")
                     
-                    button = page.locator('button:has-text("+1 GB")')
+                    button = page.locator('button:has-text("+1 GB")').nth(1)
                     if button:
                         is_disabled = button.get_attribute('disabled') is not None
                         if is_disabled:
